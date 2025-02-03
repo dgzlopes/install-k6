@@ -12,6 +12,10 @@ curl https://install-k6.com/please.sh | sh
 - Downloads the latest k6 release and installs it in `~/.k6/bin`
 - Shows how to add `~/.k6/bin` to your `PATH`
 
+### How do I update k6?
+
+Just run the installation script again! It will download the latest version and replace the existing one.
+
 ### Can I pick a specific version?
 
 Yes! You can pass the version as an environment variable:
