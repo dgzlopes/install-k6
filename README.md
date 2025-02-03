@@ -1,6 +1,8 @@
 # 📦 install-k6
 *A simple, polite way to install [k6](https://github.com/grafana/k6) – performance testing made easy!*  
 
+![demo](https://github.com/user-attachments/assets/43d92050-004a-4b83-a84b-d817e0a6a627)
+
 ## Installation
 To install `k6`, run:  
 ```sh
