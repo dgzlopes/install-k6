@@ -1,7 +1,7 @@
 # 📦 install-k6
 *A simple, polite way to install [k6](https://github.com/grafana/k6) – performance testing made easy!*  
 
-## 🛠 Installation
+## Installation
 To install `k6`, run:  
 ```sh
 curl https://install-k6.com/please.sh | sh
