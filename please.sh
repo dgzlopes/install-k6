@@ -46,6 +46,7 @@ install_k6() {
         echo "   Installing in $BIN_DIR might override or conflict with the existing installation."
     fi
 
+    UPDATE_MODE=false
     if [ -x "$K6_EXE" ]; then
         CURRENT_VERSION=$($K6_EXE version 2>/dev/null | awk '{print $2}' | tr -d 'v')
 
@@ -56,6 +57,7 @@ install_k6() {
         fi
 
         echo "🔄 Updating k6 from $CURRENT_VERSION to $K6_VERSION..."
+        UPDATE_MODE=true
     else
         echo "🚀 Installing k6 version $K6_VERSION..."
     fi
@@ -96,21 +98,22 @@ install_k6() {
     mv "$TMP_BIN" "$K6_EXE"
     chmod +x "$K6_EXE"
 
-    echo "✅ Successfully installed k6 v$K6_VERSION at $K6_EXE"
+    if [ "$UPDATE_MODE" = true ]; then
+        echo "✅ Successfully updated k6 to version $K6_VERSION"
+    else
+        echo "✅ Successfully installed k6 v$K6_VERSION at $K6_EXE"
+        echo ""
+        echo "📌 To use k6, add it to your PATH by running:"
+        echo " 🔹Bash: "
+        echo "         echo 'export PATH=\"$HOME/.k6/bin:\$PATH\"' >> ~/.bashrc && source ~/.bashrc"
+        echo " 🔹Zsh: "
+        echo "         echo 'export PATH=\"$HOME/.k6/bin:\$PATH\"' >> ~/.zshrc && source ~/.zshrc"
+        echo ""
+        echo "✨ Run 'k6 --help' to get started."
+        echo "📖 Learn more: https://grafana.com/docs/k6/latest/"
+    fi
 
     cleanup
-
-    echo ""
-    echo "📌 To use k6, add it to your PATH by running:"
-    echo ""
-    echo "   🔹 **For Bash:**"
-    echo "     echo 'export PATH=\"$HOME/.k6/bin:\$PATH\"' >> ~/.bashrc && source ~/.bashrc"
-    echo ""
-    echo "   🔹 **For Zsh:**"
-    echo "     echo 'export PATH=\"$HOME/.k6/bin:\$PATH\"' >> ~/.zshrc && source ~/.zshrc"
-    echo ""
-    echo "✨ Run 'k6 --help' to get started."
-    echo "📖 Learn more: https://grafana.com/docs/k6/latest/"
 }
 
 install_k6
