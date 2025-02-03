@@ -4,7 +4,7 @@
 ## 🛠 Installation
 To install `k6`, run:  
 ```sh
-curl -o- https://raw.githubusercontent.com/dgzlopes/install-k6/main/please.sh | sh
+curl https://install-k6.com/please.sh | sh
 ```
 
 ### What does this script do?
@@ -14,8 +14,8 @@ curl -o- https://raw.githubusercontent.com/dgzlopes/install-k6/main/please.sh | 
 
 ### Can I pick a specific version?
 
-Yes! Just pass the version as an environment variable:
+Yes! You can pass the version as an environment variable:
 ```sh
-K6_VERSION=v0.54.0 curl -o- https://raw.githubusercontent.com/dgzlopes/install-k6/main/please.sh | sh
+K6_VERSION=0.54.0 sh -c "$(curl -fsSL https://install-k6.com/please.sh)"
 ```
 
