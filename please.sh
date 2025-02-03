@@ -42,7 +42,7 @@ install_k6() {
     SYSTEM_K6_PATH=$(command -v k6 || true)
 
     if [ -n "$SYSTEM_K6_PATH" ] && [ "$SYSTEM_K6_PATH" != "$K6_EXE" ]; then
-        echo "⚠️  k6 is already installed at: $SYSTEM_K6_PATH"
+        echo "⚠️  k6 is already installed at: $SYSTEM_K6_PATH using a different method."
         echo "Installing a new version in $BIN_DIR might override the existing installation."
         echo ""
         echo "Do you want to proceed with this installation? (y/n)"
@@ -56,15 +56,27 @@ install_k6() {
 
     if [ -x "$K6_EXE" ]; then
         CURRENT_VERSION=$($K6_EXE version 2>/dev/null | awk '{print $2}' | tr -d 'v')
+
         if [ "$CURRENT_VERSION" = "$K6_VERSION" ]; then
             echo "✅ k6 is already installed at version $CURRENT_VERSION. No upgrade needed."
             cleanup
             exit 0
         fi
+
+        echo "⚠️  k6 is installed at version $CURRENT_VERSION."
+        echo "Do you want to upgrade to version $K6_VERSION? (y/n)"
+        read -r USER_CONFIRMATION
+        if [ "$USER_CONFIRMATION" != "y" ]; then
+            echo "❌ Installation aborted."
+            cleanup
+            exit 0
+        fi
+
         echo "🔄 Upgrading k6 from $CURRENT_VERSION to $K6_VERSION..."
     else
         echo "🚀 Installing k6 version $K6_VERSION..."
     fi
+
 
     OS=$(uname -s | tr '[:upper:]' '[:lower:]')
     ARCH=$(uname -m)
