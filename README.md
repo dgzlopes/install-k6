@@ -1,9 +1,9 @@
 # 📦 install-k6
-*A simple and polite way to setup [Grafana k6](https://github.com/grafana/k6)*  
+*A simple and polite way to setup [Grafana k6](https://github.com/grafana/k6) on Linux, macOS, and WSL.*
 
 You run:  
 ```sh
-curl https://install-k6.com/please.sh | sh
+curl -fsSL  https://install-k6.com/please.sh | bash
 ```
 
 And... that's it ✨
@@ -15,7 +15,7 @@ And... that's it ✨
 ### What does this script do?
 - Detects your OS & architecture
 - Downloads the latest k6 release and installs it in `~/.k6/bin`
-- Shows how to add `~/.k6/bin` to your `PATH`
+- Tries to add `~/.k6/bin` to your PATH. If it fails, it will suggest you do it manually.
 
 ### How do I update k6?
 
@@ -25,6 +25,6 @@ Just run the installation script again! It will download the latest version and 
 
 Yes! You can pass the version as an environment variable:
 ```sh
-K6_VERSION=0.54.0 sh -c "$(curl -fsSL https://install-k6.com/please.sh)"
+curl -fsSL https://install-k6.com/please.sh | bash -s v0.54.0
 ```
 
