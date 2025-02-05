@@ -68,7 +68,7 @@ install_k6() {
     case "$ARCH" in
         x86_64) ARCH="amd64" ;;
         aarch64) ARCH="arm64" ;;
-        armv7l) ARCH="arm" ;;
+        arm64) ARCH="arm64" ;;
         *) fail "❌ Unsupported architecture: $ARCH" ;;
     esac
 
