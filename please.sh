@@ -21,8 +21,9 @@ for arg in "$@"; do
 done
 
 if [[ -n "$user_version" ]]; then
-  # If the user prepended 'v', remove it (e.g. "v0.54.0" -> "0.54.0").
-  user_version="${user_version#v}"
+  if [[ ! "$user_version" =~ ^v ]]; then
+    user_version="v$user_version"
+  fi
   export K6_VERSION="$user_version"
 fi
 
@@ -97,7 +98,7 @@ trap cleanup EXIT
 install_k6() {
   local USER="grafana"
   local PROG="k6"
-  local GH_API="https://api.github.com/repos/$USER/$PROG/releases"
+  # Remove GH_API and references to GitHub
 
   local INSTALL_DIR="${K6_INSTALL:-$HOME/.k6}"
   local BIN_DIR="$INSTALL_DIR/bin"
@@ -114,17 +115,15 @@ install_k6() {
 
   # Determine the K6 version if not provided
   if [[ -z "${K6_VERSION:-}" ]]; then
-    info "Fetching the latest k6 version from GitHub..."
-    K6_VERSION="$(curl -sSL "$GH_API/latest" \
-      | grep '"tag_name":' \
-      | head -1 \
-      | awk -F '"' '{print $4}' \
-      | tr -d 'v')"
+    info "Fetching the latest k6 version from the URL..."
+    K6_VERSION="$(curl -sSL https://install-k6.com/latest-version.txt | awk '{print $1}')"
   fi
 
-  # Check if that version is valid on GitHub
-  if ! curl --silent --fail --head "https://github.com/$USER/$PROG/releases/tag/v$K6_VERSION" > /dev/null; then
-    fail "k6 version $K6_VERSION does not exist or is unavailable."
+  # Validate the custom version if provided
+  if [[ -n "$user_version" ]]; then
+    if ! curl --silent --fail --head "https://github.com/$USER/$PROG/releases/tag/$K6_VERSION" > /dev/null; then
+      fail "k6 version $K6_VERSION does not exist or is unavailable."
+    fi
   fi
 
   # Check if k6 is already installed in the system
@@ -139,7 +138,7 @@ Installing in $BIN_DIR might override or conflict with the existing installation
   local UPDATE_MODE=false
   if [[ -x "$K6_EXE" ]]; then
     local CURRENT_VERSION
-    CURRENT_VERSION="$("$K6_EXE" version 2>/dev/null | awk '/k6-cli/ {print $2}' | tr -d 'v')"
+    CURRENT_VERSION="$("$K6_EXE" version 2>/dev/null | awk '/k6-cli/ {print $2}')"
 
     if [[ "$CURRENT_VERSION" == "$K6_VERSION" ]]; then
       success "k6 is already at version $CURRENT_VERSION. No update needed."
@@ -168,14 +167,14 @@ Installing in $BIN_DIR might override or conflict with the existing installation
   # Map OS and ARCH to official k6 binaries
   local FILE
   case "${OS}_${ARCH}" in
-    darwin_amd64)  FILE="k6-v${K6_VERSION}-macos-amd64.zip" ;;
-    darwin_arm64)  FILE="k6-v${K6_VERSION}-macos-arm64.zip" ;;
-    linux_amd64)   FILE="k6-v${K6_VERSION}-linux-amd64.tar.gz" ;;
-    linux_arm64)   FILE="k6-v${K6_VERSION}-linux-arm64.tar.gz" ;;
+    darwin_amd64)  FILE="k6-${K6_VERSION}-macos-amd64.zip" ;;
+    darwin_arm64)  FILE="k6-${K6_VERSION}-macos-arm64.zip" ;;
+    linux_amd64)   FILE="k6-${K6_VERSION}-linux-amd64.tar.gz" ;;
+    linux_arm64)   FILE="k6-${K6_VERSION}-linux-arm64.tar.gz" ;;
     *) fail "No binary asset available for ${OS}-${ARCH}." ;;
   esac
 
-  local K6_URL="https://github.com/$USER/$PROG/releases/download/v${K6_VERSION}/${FILE}"
+  local K6_URL="https://github.com/$USER/$PROG/releases/download/${K6_VERSION}/${FILE}"
 
   info "Downloading binary: $K6_URL"
   curl --fail --location --progress-bar --output "$TMP_DIR/$FILE" "$K6_URL"

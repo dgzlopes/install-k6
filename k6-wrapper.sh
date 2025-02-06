@@ -73,20 +73,15 @@ k6_exit_code=$?
 ###############################################################################
 
 # Get the installed version using k6-cli version command
-installed_version="$("$REAL_K6" version | awk '{print $2}' | tr -d 'v')"
+installed_version="$("$REAL_K6" version | awk '{print $2}')"
 
-# Fetch the latest version from GitHub (non-blocking for user commands, but still done now)
-if latest_version="$(curl -sSL https://api.github.com/repos/grafana/k6/releases/latest \
-  | grep '"tag_name":' \
-  | head -1 \
-  | awk -F '"' '{print $4}' \
-  | tr -d 'v')"; then
+# Replace local file read with URL fetch
+latest_version="$(curl -sSL https://install-k6.com/latest-version.txt | awk '{print $1}')"
 
-  # Compare
-  if [[ -n "$latest_version" && "$latest_version" != "$installed_version" ]]; then
-    warn "A newer version of k6 ($latest_version) is available (you have $installed_version)."
-    info "You can update by running: curl -fsSL $INSTALLER_URL | bash"
-  fi
+# Compare
+if [[ -n "$latest_version" && "$latest_version" != "$installed_version" ]]; then
+  warn "A newer version of k6 ($latest_version) is available (you have $installed_version)."
+  info "You can update by running: curl -fsSL $INSTALLER_URL | bash"
 fi
 
 # Finally, exit with the original k6 exit code
