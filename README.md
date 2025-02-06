@@ -8,7 +8,7 @@ curl -fsSL  https://install-k6.com/please.sh | bash
 
 And... that's it ✨
 
-https://github.com/user-attachments/assets/28256741-405a-4027-a206-430e3eb708e9
+https://github.com/user-attachments/assets/913aa5fb-0571-4a3f-8727-a00edf3479d2
 
 ## F.A.Q
 
