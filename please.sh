@@ -199,7 +199,7 @@ Installing in $BIN_DIR might override or conflict with the existing installation
     chmod +x "$BIN_DIR/k6-cli"
 
     # Download the wrapper script, rename to k6, and make it executable
-    info "Downloading updates wrapper: $WRAPPER_URL"
+    info "Downloading wrapper: $WRAPPER_URL"
     curl --fail --location --progress-bar --output "$WRAPPER_EXE" "$WRAPPER_URL"
     chmod +x "$WRAPPER_EXE"
   fi
