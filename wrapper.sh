@@ -88,7 +88,7 @@ if [[ ! -f "$FIRST_RUN_MARKER" ]]; then
   echo -e "${Green}Running k6 for the first time?! Welcome!${Color_Off}"
   echo -e "${Dim}Here are two quick ways for you to get started:${Color_Off}"
   echo ""
-  echo -e "   ${Yellow}[A]${Color_Off} Explore our *awesome* guides:"
+  echo -e "   ${Yellow}[A]${Color_Off} Follow one of our *awesome* guides:"
   echo -e "       - ${Blue}https://grafana.com/docs/k6/latest/get-started/${Color_Off}"
   echo ""
   echo -e "   ${Yellow}[B]${Color_Off} Jump straight in and get your hands dirty:"
