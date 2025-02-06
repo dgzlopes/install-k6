@@ -177,7 +177,7 @@ Installing in $BIN_DIR might override or conflict with the existing installation
 
   local K6_URL="https://github.com/$USER/$PROG/releases/download/v${K6_VERSION}/${FILE}"
 
-  info "Downloading: $K6_URL"
+  info "Downloading binary: $K6_URL"
   curl --fail --location --progress-bar --output "$TMP_DIR/$FILE" "$K6_URL"
 
   # Extract
@@ -199,7 +199,7 @@ Installing in $BIN_DIR might override or conflict with the existing installation
     chmod +x "$BIN_DIR/k6-cli"
 
     # Download the wrapper script, rename to k6, and make it executable
-    info "Downloading: $WRAPPER_URL"
+    info "Downloading updates wrapper: $WRAPPER_URL"
     curl --fail --location --progress-bar --output "$WRAPPER_EXE" "$WRAPPER_URL"
     chmod +x "$WRAPPER_EXE"
   fi
