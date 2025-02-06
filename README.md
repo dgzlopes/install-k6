@@ -33,6 +33,8 @@ curl -fsSL https://install-k6.com/please.sh | bash -s v0.54.0
 
 Yes! You can pass the `--no-update-check` flag:
 ```sh
+curl -fsSL https://install-k6.com/please.sh | bash -s -- --no-update-check
+```
 
 ## Credits 
 
