@@ -2,10 +2,25 @@
 set -euo pipefail
 
 ###############################################################################
-# 0. Parse optional version argument (e.g., "0.54.0" or "v0.54.0").
+# 0. Parse optional arguments (e.g., "0.54.0" or "v0.54.0" and "--no-update-check").
 ###############################################################################
-if [[ $# -ge 1 ]]; then
-  user_version="$1"
+DISABLE_UPDATES_CHECK=false
+user_version=""
+
+for arg in "$@"; do
+  case $arg in
+    --no-update-check)
+      DISABLE_UPDATES_CHECK=true
+      shift
+      ;;
+    *)
+      user_version="$arg"
+      shift
+      ;;
+  esac
+done
+
+if [[ -n "$user_version" ]]; then
   # If the user prepended 'v', remove it (e.g. "v0.54.0" -> "0.54.0").
   user_version="${user_version#v}"
   export K6_VERSION="$user_version"
@@ -86,7 +101,7 @@ install_k6() {
 
   local INSTALL_DIR="${K6_INSTALL:-$HOME/.k6}"
   local BIN_DIR="$INSTALL_DIR/bin"
-  local K6_EXE="$BIN_DIR/k6-cli"
+  local K6_EXE="$BIN_DIR/k6"
   local WRAPPER_URL="https://install-k6.com/k6-wrapper.sh"
   local WRAPPER_EXE="$BIN_DIR/k6"
 
@@ -172,18 +187,22 @@ Installing in $BIN_DIR might override or conflict with the existing installation
     unzip -qo "$TMP_DIR/$FILE" -d "$TMP_DIR"
   fi
 
-  # Move the binary into place and rename to k6-cli
+  # Move the binary into place
   local TMP_BIN
   TMP_BIN="$(find "$TMP_DIR" -type f -name "k6" | head -n 1)"
   [[ ! -f "$TMP_BIN" ]] && fail "Could not locate k6 binary after extraction."
 
-  mv "$TMP_BIN" "$K6_EXE"
-  chmod +x "$K6_EXE"
+  if [[ "$DISABLE_UPDATES_CHECK" == true ]]; then
+    mv "$TMP_BIN" "$K6_EXE"
+  else
+    mv "$TMP_BIN" "$BIN_DIR/k6-cli"
+    chmod +x "$BIN_DIR/k6-cli"
 
-  # Download the wrapper script, rename to k6, and make it executable
-  info "Downloading wrapper script (that checks for updates): $WRAPPER_URL"
-  curl --fail --location --progress-bar --output "$WRAPPER_EXE" "$WRAPPER_URL"
-  chmod +x "$WRAPPER_EXE"
+    # Download the wrapper script, rename to k6, and make it executable
+    info "Downloading: $WRAPPER_URL"
+    curl --fail --location --progress-bar --output "$WRAPPER_EXE" "$WRAPPER_URL"
+    chmod +x "$WRAPPER_EXE"
+  fi
 
   if [[ "$UPDATE_MODE" == true ]]; then
     success "Successfully updated k6 to version $K6_VERSION."
