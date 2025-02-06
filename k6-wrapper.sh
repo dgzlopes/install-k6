@@ -61,13 +61,21 @@ Please reinstall k6, e.g.:
 fi
 
 ###############################################################################
-# 3. Check for updates
+# 3. Run k6 first
+###############################################################################
+
+# Run the real k6 command and capture the exit code
+"$REAL_K6" "$@"
+k6_exit_code=$?
+
+###############################################################################
+# 4. Check for updates (after k6 completes)
 ###############################################################################
 
 # Get the installed version using k6-cli version command
 installed_version="$("$REAL_K6" version | awk '{print $2}' | tr -d 'v')"
 
-# Fetch the latest version from GitHub
+# Fetch the latest version from GitHub (non-blocking for user commands, but still done now)
 if latest_version="$(curl -sSL https://api.github.com/repos/grafana/k6/releases/latest \
   | grep '"tag_name":' \
   | head -1 \
@@ -81,8 +89,5 @@ if latest_version="$(curl -sSL https://api.github.com/repos/grafana/k6/releases/
   fi
 fi
 
-###############################################################################
-# 4. Delegate all arguments to "k6-cli"
-###############################################################################
-
-exec "$REAL_K6" "$@"
+# Finally, exit with the original k6 exit code
+exit "$k6_exit_code"
