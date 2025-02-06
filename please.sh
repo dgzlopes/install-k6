@@ -115,7 +115,7 @@ install_k6() {
 
   # Determine the K6 version if not provided
   if [[ -z "${K6_VERSION:-}" ]]; then
-    info "Fetching the latest k6 version from the URL..."
+    info "Fetching the latest k6 version..."
     K6_VERSION="$(curl -sSL https://install-k6.com/latest-version.txt | awk '{print $1}')"
   fi
 
