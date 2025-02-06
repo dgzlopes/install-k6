@@ -86,7 +86,9 @@ install_k6() {
 
   local INSTALL_DIR="${K6_INSTALL:-$HOME/.k6}"
   local BIN_DIR="$INSTALL_DIR/bin"
-  local K6_EXE="$BIN_DIR/k6"
+  local K6_EXE="$BIN_DIR/k6-cli"
+  local WRAPPER_URL="https://install-k6.com/k6-wrapper.sh"
+  local WRAPPER_EXE="$BIN_DIR/k6"
 
   mkdir -p "$BIN_DIR"
 
@@ -170,13 +172,18 @@ Installing in $BIN_DIR might override or conflict with the existing installation
     unzip -qo "$TMP_DIR/$FILE" -d "$TMP_DIR"
   fi
 
-  # Move the binary into place
+  # Move the binary into place and rename to k6-cli
   local TMP_BIN
   TMP_BIN="$(find "$TMP_DIR" -type f -name "k6" | head -n 1)"
   [[ ! -f "$TMP_BIN" ]] && fail "Could not locate k6 binary after extraction."
 
   mv "$TMP_BIN" "$K6_EXE"
   chmod +x "$K6_EXE"
+
+  # Download the wrapper script, rename to k6, and make it executable
+  info "Downloading wrapper script (that checks for updates): $WRAPPER_URL"
+  curl --fail --location --progress-bar --output "$WRAPPER_EXE" "$WRAPPER_URL"
+  chmod +x "$WRAPPER_EXE"
 
   if [[ "$UPDATE_MODE" == true ]]; then
     success "Successfully updated k6 to version $K6_VERSION."
