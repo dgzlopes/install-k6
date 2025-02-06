@@ -20,3 +20,4 @@ jobs:
           with:
             title: Update k6 version
             signoff: true
+            commit-message: Update k6 version
