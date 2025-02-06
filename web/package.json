@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "cp ../please.sh static/please.sh; cp ../k6-wrapper.sh static/k6-wrapper.sh; vite dev",
-		"build": "cp ../please.sh static/please.shsh; cp ../k6-wrapper.sh static/k6-wrapper.sh; vite build",
+		"build": "cp ../please.sh static/please.sh; cp ../k6-wrapper.sh static/k6-wrapper.sh; vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
