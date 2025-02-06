@@ -68,16 +68,17 @@ fi
 installed_version="$("$REAL_K6" version | awk '{print $2}' | tr -d 'v')"
 
 # Fetch the latest version from GitHub
-latest_version="$(curl -sSL https://api.github.com/repos/grafana/k6/releases/latest \
+if latest_version="$(curl -sSL https://api.github.com/repos/grafana/k6/releases/latest \
   | grep '"tag_name":' \
   | head -1 \
   | awk -F '"' '{print $4}' \
-  | tr -d 'v')"
+  | tr -d 'v')"; then
 
-# Compare
-if [[ -n "$latest_version" && "$latest_version" != "$installed_version" ]]; then
-  warn "A newer version of k6 ($latest_version) is available (you have $installed_version)."
-  info "You can update by running: curl -fsSL $INSTALLER_URL | bash"
+  # Compare
+  if [[ -n "$latest_version" && "$latest_version" != "$installed_version" ]]; then
+    warn "A newer version of k6 ($latest_version) is available (you have $installed_version)."
+    info "You can update by running: curl -fsSL $INSTALLER_URL | bash"
+  fi
 fi
 
 ###############################################################################
