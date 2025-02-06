@@ -212,7 +212,7 @@ Installing in $BIN_DIR might override or conflict with the existing installation
 add_to_path_in_shell_config() {
   # If k6 is already in PATH, no need to do anything.
   if command -v k6 >/dev/null 2>&1; then
-    info "k6 is already on your PATH. Run 'k6 --help' to get started!"
+    info "k6 is already on your PATH. No changes needed."
     return
   fi
 
