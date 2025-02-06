@@ -1,5 +1,5 @@
 # 📦 install-k6
-*A simple and polite way to setup [Grafana k6](https://github.com/grafana/k6) on Linux, macOS, and WSL.*
+*A simple and polite way to setup [Grafana k6](https://github.com/grafana/k6) on Linux, macOS, and WSL*
 
 You run:  
 ```sh
@@ -9,8 +9,6 @@ curl -fsSL  https://install-k6.com/please.sh | bash
 And... that's it ✨
 
 https://github.com/user-attachments/assets/28256741-405a-4027-a206-430e3eb708e9
-
-
 
 ## F.A.Q
 
@@ -30,3 +28,6 @@ Yes! You can pass the version as an environment variable:
 curl -fsSL https://install-k6.com/please.sh | bash -s v0.54.0
 ```
 
+## Credits 
+
+To the [bun](https://bun.sh) team - this script is **heavily** inspired by their [bun installer](https://bun.sh/docs/installation).
