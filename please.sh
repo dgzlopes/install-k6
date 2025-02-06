@@ -139,7 +139,7 @@ Installing in $BIN_DIR might override or conflict with the existing installation
   local UPDATE_MODE=false
   if [[ -x "$K6_EXE" ]]; then
     local CURRENT_VERSION
-    CURRENT_VERSION="$("$K6_EXE" version 2>/dev/null | awk '{print $2}' | tr -d 'v')"
+    CURRENT_VERSION="$("$K6_EXE" version 2>/dev/null | awk '/k6-cli/ {print $2}' | tr -d 'v')"
 
     if [[ "$CURRENT_VERSION" == "$K6_VERSION" ]]; then
       success "k6 is already at version $CURRENT_VERSION. No update needed."
